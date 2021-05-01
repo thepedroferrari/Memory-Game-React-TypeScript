@@ -1,32 +1,29 @@
 import { CardsGrid } from "components/CardsGrid"
-import GameOver from "components/GameOver/GameOver"
-import { Leaderboard } from "components/Leaderboard/Leaderboard"
+import { GameOver } from "components/GameOver"
+import { Leaderboard } from "components/Leaderboard"
 import { Timer } from "components/Timer"
-import { trackedGameStore } from "game-context"
+import { trackedGameStore } from "gameStore"
+import { StyledButton } from "./Styled.Button"
+import { StyledGameWrapper } from "./Styled.GameWrapper"
+import { StyledH1 } from "./Styled.H1"
 
 export const Game = () => {
-  const { isGameStarted, score, isGameOver, startGame } = trackedGameStore()
+  const { isGameStarted, isGameOver, startGame } = trackedGameStore()
 
   return (
-    <>
+    <StyledGameWrapper>
       <header>
-        <span>
-          <strong>Score</strong>: {score}
-        </span>
-        {isGameStarted && <Timer minutes="0" seconds="10" />}
+        {isGameStarted && <Timer />}
+        <StyledH1>Memory Game</StyledH1>
       </header>
-      {isGameOver ? (
-        <GameOver />
-      ) : (
-        <>
-          <CardsGrid />
-          <button type="button" disabled={isGameStarted} onClick={startGame}>
-            {isGameStarted ? "GAME STARTED" : "START GAME"}
-          </button>
-        </>
-      )}
+      {isGameOver && <GameOver />}
+
+      <CardsGrid />
+      <StyledButton type="button" disabled={isGameStarted} onClick={startGame}>
+        {isGameStarted ? "GAME STARTED" : "START GAME"}
+      </StyledButton>
 
       <Leaderboard />
-    </>
+    </StyledGameWrapper>
   )
 }

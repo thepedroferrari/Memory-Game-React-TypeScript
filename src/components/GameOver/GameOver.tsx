@@ -1,70 +1,52 @@
-import { trackedGameStore } from "game-context"
-import { useRef, useState } from "react"
-import { leaderboardRef } from "../../firebase"
-import { getDeviceType } from "../../utils"
+import { StyledButton } from "components/Game/Styled.Button"
+import { trackedGameStore } from "gameStore"
+import { useRef } from "react"
+import { StyledGameOver } from "./Styled.GameOver"
+import { updateLeaderboard } from "./updateLeaderboard"
 
-const device = getDeviceType()
-
-const GameOver = () => {
-  const {
-    score,
-    newGame,
-    scoreBoard,
-    setScoreBoard,
-    isLoading,
-    setIsLoading,
-  } = trackedGameStore()
-
+export const GameOver = () => {
+  const { newGame, isLoading, isScoreSaved, score, clicks } = trackedGameStore()
   const nameRef = useRef<HTMLInputElement>(null)
-  const [isSaved, setIsSaved] = useState(false)
-
-  const updateLeaderboard = async () => {
-    const name = nameRef.current?.value || "Player"
-    setIsLoading(true)
-    await leaderboardRef
-      .add({
-        name,
-        score,
-        device,
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error)
-      })
-    setIsLoading(false)
-    setScoreBoard([...scoreBoard, { id: Date.now(), name, device, score }])
-    setIsSaved(true)
-  }
 
   return (
-    <>
-      {isSaved ? (
-        <>
-          <h4>Score saved to the leaderboard!</h4>
-          <button type="button" onClick={newGame}>
-            New Game
-          </button>
-        </>
-      ) : (
-        <>
-          <h4>Add yourself to the leaderboard</h4>
+    <StyledGameOver>
+      <div>
+        {isScoreSaved ? (
+          <>
+            <h4>Score saved to the leaderboard!</h4>
+            <button type="button" onClick={() => newGame(true)}>
+              New Game
+            </button>
+          </>
+        ) : (
+          <>
+            <h4>
+              You finished in {score} seconds with {clicks} clicks!
+            </h4>
+            <p>Save your score to the leaderboard</p>
+            <label htmlFor="leaderboardName">
+              <p>Your name</p>
+              <input
+                ref={nameRef}
+                id="leaderboardName"
+                name="leaderboardName"
+                placeholder="Player"
+                maxLength={20}
+              />
+            </label>
 
-          <label htmlFor="leaderboardName">
-            Your name:
-            <input
-              ref={nameRef}
-              id="leaderboardName"
-              name="leaderboardName"
-              maxLength={20}
-            />
-          </label>
+            <StyledButton
+              type="button"
+              onClick={() => updateLeaderboard(nameRef)}>
+              {isLoading ? "Saving..." : "Save score to Leaderboard"}
+            </StyledButton>
 
-          <button type="button" onClick={updateLeaderboard}>
-            {isLoading ? "Saving..." : "Save score to Leaderboard"}
-          </button>
-        </>
-      )}
-    </>
+            <StyledButton type="button" onClick={() => newGame(false)}>
+              New Game without saving
+            </StyledButton>
+          </>
+        )}
+      </div>
+    </StyledGameOver>
   )
 }
-
-export default GameOver

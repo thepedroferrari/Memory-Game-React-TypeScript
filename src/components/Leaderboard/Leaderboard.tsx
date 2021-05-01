@@ -1,13 +1,15 @@
-import { Fragment, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { TScoreboard } from "types"
-
 import { leaderboardRef } from "../../firebase"
 import { sortNumbersBy } from "../../utils"
+import { StyledLeaderboard } from "./Styled.Leaderboard"
+import { StyledLeaderboardHeader } from "./Styled.LeaderboardHeader"
 
 export const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState<TScoreboard[]>([])
 
   const getLeaderboard = useCallback(async () => {
+    console.log("GETTING LEADERBOARD")
     const leaderboardResults = await leaderboardRef.get()
     const promisedLeaderboard = leaderboardResults.docs.map((doc) => doc.data())
 
@@ -15,7 +17,7 @@ export const Leaderboard = () => {
       const newLeaderboard = sortNumbersBy(
         "score",
         Object.values(promisedLeaderboard),
-        "dsc",
+        "asc",
       )
       setLeaderboard(newLeaderboard as TScoreboard[])
     }
@@ -23,29 +25,46 @@ export const Leaderboard = () => {
 
   useEffect(() => {
     getLeaderboard()
+    console.log("RELOAD LEADERBOARD")
   }, [getLeaderboard])
+
+  useEffect(() => {}, [leaderboard])
+
+  const leaderboardResults = leaderboard.map(
+    ({ id, name, device, score, clicks }, i) => (
+      <ul key={id}>
+        <li>
+          <span>
+            {i + 1}. {name}
+          </span>
+          <span>{device}</span>
+          <span>{clicks}</span>
+          <span>{score}s</span>
+        </li>
+      </ul>
+    ),
+  )
 
   return (
     <>
-      <h3>Leaderboard</h3>
-      <ul className="leaderboard">
+      <StyledLeaderboardHeader>Leaderboard</StyledLeaderboardHeader>
+      <StyledLeaderboard>
         <li>
-          <strong>Name</strong>
+          <span>
+            <strong>Name</strong>
+          </span>
+          <span>
+            <strong>Device</strong>
+          </span>
+          <span>
+            <strong>Clicks</strong>
+          </span>
+          <span>
+            <strong>Time</strong>
+          </span>
         </li>
-        <li>
-          <strong>Device</strong>
-        </li>
-        <li>
-          <strong>Score</strong>
-        </li>
-        {leaderboard.map((entry) => (
-          <Fragment key={entry.id}>
-            <li>{entry.name}</li>
-            <li>{entry.device}</li>
-            <li>{entry.score}</li>
-          </Fragment>
-        ))}
-      </ul>
+        {leaderboardResults}
+      </StyledLeaderboard>
     </>
   )
 }

@@ -1,3 +1,5 @@
+export { didCardsMatch } from "./didCardsMatch"
+export { getCardId } from "./getCardId"
 export { getDeviceType } from "./getDeviceType"
 export { getTimeLeft } from "./getTimeLeft"
 export { prefixTime } from "./prefixTime"

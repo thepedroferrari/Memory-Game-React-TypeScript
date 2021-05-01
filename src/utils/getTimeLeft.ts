@@ -15,33 +15,28 @@ const getHours = (time: number) => ~~((time / ONE_HOUR_MS) % 24)
 const getMinutes = (time: number) => ~~((time / ONE_MINUTE_MS) % 60)
 const getSeconds = (time: number) => ~~((time / ONE_SECOND_MS) % 60)
 
-export const getTimeLeft = (
-  date: number | null | undefined,
-  format: Format = "mm:ss",
-): Timeleft => {
+export const getTimeLeft = (date = 0, format: Format = "mm:ss"): Timeleft => {
   let timeLeft: Timeleft = {
     hours: null,
     minutes: null,
     seconds: null,
   }
 
-  if (typeof date === "number" && date >= 0) {
-    if (format === "mm:ss") {
-      timeLeft = {
-        hours: "00",
-        minutes: prefixTime(
-          getMinutes(date) + getHours(date) * 60 + getDays(date) * 24 * 60,
-        ),
-        seconds: prefixTime(getSeconds(date)),
-      }
+  if (format === "mm:ss") {
+    timeLeft = {
+      hours: "00",
+      minutes: prefixTime(
+        getMinutes(date) + getHours(date) * 60 + getDays(date) * 24 * 60,
+      ),
+      seconds: prefixTime(getSeconds(date)),
     }
+  }
 
-    if (format === "s") {
-      timeLeft = {
-        hours: "0",
-        minutes: "0",
-        seconds: `${~~(date / ONE_SECOND_MS)}`,
-      }
+  if (format === "s") {
+    timeLeft = {
+      hours: "0",
+      minutes: "0",
+      seconds: `${~~(date / ONE_SECOND_MS)}`,
     }
   }
 
