@@ -42,7 +42,7 @@ export const CardsGrid = () => {
 
       setTimeout(() => {
         setCardsOpen([])
-      }, ONE_SECOND_MS)
+      }, ONE_SECOND_MS / 2)
     }
   }, [cardsOpen, matches, gameOver, setMatches, setCardsOpen])
 
@@ -53,7 +53,7 @@ export const CardsGrid = () => {
   }, [isGameStarted])
 
   return (
-    <StyledGrid className={isGameStarted ? "gradientBorder" : ""}>
+    <StyledGrid className={isGameStarted ? "gradient-border" : ""}>
       {!isGameStarted && (
         <div className="startGame">
           <StyledButton

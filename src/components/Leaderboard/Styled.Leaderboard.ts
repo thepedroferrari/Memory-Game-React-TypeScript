@@ -13,6 +13,12 @@ export const StyledLeaderboard = styled.ul`
     background: var(--color-violet);
   }
 
+  & > li:first-child {
+    & > span:first-child {
+      margin-left: 1rem;
+    }
+  }
+
   li {
     display: grid;
     padding: 0;

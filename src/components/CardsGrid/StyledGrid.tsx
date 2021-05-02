@@ -8,7 +8,7 @@ export const StyledGrid = styled.div<Props>`
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
   max-width: 50rem;
-  gap: 1px;
+  gap: 2px;
   margin: 1rem;
 
   picture {
@@ -30,14 +30,6 @@ export const StyledGrid = styled.div<Props>`
     left: calc(-1 * var(--border-width));
     height: calc(100% + var(--border-width) * 2);
     width: calc(100% + var(--border-width) * 2);
-    border-radius: var(--border-radius);
-    z-index: -1;
-    animation: animatedgradient 10s ease alternate infinite;
-    background-size: 300% 300%;
-    background: var(--color-violet);
-  }
-
-  &.gradientBorder:after {
     background: linear-gradient(
       60deg,
       #f79533,
@@ -49,9 +41,18 @@ export const StyledGrid = styled.div<Props>`
       #07b39b,
       #6fba82
     );
+    border-radius: var(--border-radius);
+    z-index: -1;
+    animation: gradient 3s ease alternate infinite;
+    background-size: 300% 300%;
+    filter: grayscale(0.8);
   }
 
-  @keyframes animatedgradient {
+  &.gradient-border:after {
+    filter: grayscale(0);
+  }
+
+  @keyframes gradient {
     0% {
       background-position: 0% 50%;
     }
