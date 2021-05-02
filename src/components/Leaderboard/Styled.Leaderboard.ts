@@ -19,11 +19,17 @@ export const StyledLeaderboard = styled.ul`
 
     column-gap: 1rem;
     row-gap: 0.33rem;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     list-style: none;
   }
 
-  span:nth-child(4n) {
+  span:nth-child(4n),
+  span:nth-child(4n -1) {
     text-align: right;
+  }
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `

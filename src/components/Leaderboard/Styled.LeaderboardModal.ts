@@ -4,7 +4,7 @@ export const StyledLeaderboardModal = styled.section`
   position: fixed;
   width: 90%;
   height: 25rem;
-  left: calc(50% - 35rem);
+  left: 5%;
   top: calc(50% - 12.5rem);
   max-width: 70rem;
   z-index: 1;
