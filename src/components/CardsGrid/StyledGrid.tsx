@@ -1,10 +1,15 @@
 import styled from "styled-components"
 
-export const StyledGrid = styled.div`
+type Props = {
+  className?: string
+}
+export const StyledGrid = styled.div<Props>`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
+  max-width: 50rem;
   gap: 1px;
+  margin: 1rem;
 
   picture {
     line-height: 0;
@@ -25,6 +30,14 @@ export const StyledGrid = styled.div`
     left: calc(-1 * var(--border-width));
     height: calc(100% + var(--border-width) * 2);
     width: calc(100% + var(--border-width) * 2);
+    border-radius: var(--border-radius);
+    z-index: -1;
+    animation: animatedgradient 10s ease alternate infinite;
+    background-size: 300% 300%;
+    background: var(--color-violet);
+  }
+
+  &.gradientBorder:after {
     background: linear-gradient(
       60deg,
       #f79533,
@@ -36,10 +49,6 @@ export const StyledGrid = styled.div`
       #07b39b,
       #6fba82
     );
-    border-radius: var(--border-radius);
-    z-index: -1;
-    animation: animatedgradient 10s ease alternate infinite;
-    background-size: 300% 300%;
   }
 
   @keyframes animatedgradient {
@@ -51,6 +60,17 @@ export const StyledGrid = styled.div`
     }
     100% {
       background-position: 0% 50%;
+    }
+  }
+
+  .startGame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    button {
+      margin-top: calc(50% - var(--font-xl) / 1.25);
+      font-size: var(--font-xl);
     }
   }
 `

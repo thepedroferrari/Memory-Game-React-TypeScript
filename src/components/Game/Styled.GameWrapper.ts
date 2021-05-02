@@ -8,6 +8,20 @@ export const StyledGameWrapper = styled.div`
   place-content: center;
   place-items: center;
   place-self: center;
-  min-height: 100vh;
-  max-height: 100vh;
+
+  header {
+    width: 100%;
+  }
+
+  .controls {
+    display: grid;
+    justify-self: end;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr max-content;
+    width: 100%;
+    align-items: center;
+    time {
+      margin-top: -10px;
+    }
+  }
 `

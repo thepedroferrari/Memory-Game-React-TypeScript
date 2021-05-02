@@ -1,12 +1,39 @@
 import { StyledButton } from "components/Game/Styled.Button"
 import { trackedGameStore } from "gameStore"
 import { useRef } from "react"
+import { TScoreboard } from "types"
+import { getDeviceType } from "utils"
+import { leaderboardRef } from "../../firebase"
 import { StyledGameOver } from "./Styled.GameOver"
-import { updateLeaderboard } from "./updateLeaderboard"
 
 export const GameOver = () => {
-  const { newGame, isLoading, isScoreSaved, score, clicks } = trackedGameStore()
+  const {
+    newGame,
+    isLoading,
+    isScoreSaved,
+    score,
+    clicks,
+    scoreBoard,
+    setScoreBoard,
+    setIsLoading,
+    saveScore,
+  } = trackedGameStore()
   const nameRef = useRef<HTMLInputElement>(null)
+
+  const updateLeaderboard = async (ref: React.RefObject<HTMLInputElement>) => {
+    const device = getDeviceType()
+
+    const name = ref.current?.value || "Player"
+    const id = Date.now()
+    const stats: TScoreboard = { id, name, device, clicks, score }
+    setIsLoading(true)
+    await leaderboardRef.add(stats).catch((error) => {
+      throw new Error(`Error adding document: ${error}`)
+    })
+    setIsLoading(false)
+    setScoreBoard([...scoreBoard, stats])
+    saveScore()
+  }
 
   return (
     <StyledGameOver>
@@ -14,9 +41,10 @@ export const GameOver = () => {
         {isScoreSaved ? (
           <>
             <h4>Score saved to the leaderboard!</h4>
-            <button type="button" onClick={() => newGame(true)}>
-              New Game
-            </button>
+
+            <StyledButton type="button" onClick={() => newGame(true)}>
+              Start New Game
+            </StyledButton>
           </>
         ) : (
           <>

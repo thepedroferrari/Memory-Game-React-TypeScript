@@ -2,6 +2,7 @@ import { TimerIcon } from "components/Icons/TimerIcon"
 import { trackedGameStore } from "gameStore"
 import { useTimer } from "hooks"
 import { useEffect } from "react"
+import { StyledTimer } from "./Styled.Timer"
 
 export const Timer = () => {
   const [{ seconds }] = useTimer(0, "s")
@@ -9,14 +10,11 @@ export const Timer = () => {
 
   useEffect(() => {
     setClock(Number(seconds))
-    console.log(seconds)
   }, [setClock, seconds])
 
   return (
-    <div className="subheader">
-      <time>
-        {TimerIcon} {seconds}
-      </time>
-    </div>
+    <StyledTimer>
+      <i>{TimerIcon()}</i> <span>{seconds}s.</span>
+    </StyledTimer>
   )
 }

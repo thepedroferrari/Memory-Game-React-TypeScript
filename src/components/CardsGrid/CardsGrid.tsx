@@ -1,4 +1,5 @@
 import { Card } from "components/Card/Card"
+import { StyledButton } from "components/Game/Styled.Button"
 import { trackedGameStore } from "gameStore"
 import shuffle from "lodash.shuffle"
 import { useEffect, useState } from "react"
@@ -16,12 +17,16 @@ export const CardsGrid = () => {
     matches,
     setMatches,
     addClicks,
+    startGame,
   } = trackedGameStore()
 
   const [shuffledDeck, setShuffledDeck] = useState(shuffle(deck))
 
   const handleOpenCard = (id: Deck["id"]) => {
-    if (cardsOpen.length < 2 && isGameStarted) {
+    if (!isGameStarted) {
+      startGame()
+    }
+    if (cardsOpen.length < 2) {
       setCardsOpen([...cardsOpen, id])
       addClicks()
     }
@@ -44,7 +49,6 @@ export const CardsGrid = () => {
     }
   }, [cardsOpen, matches, gameOver, setMatches, setCardsOpen])
 
-  console.log(shuffledDeck)
   useEffect(() => {
     if (isGameStarted) {
       setShuffledDeck(shuffle(deck))
@@ -52,7 +56,17 @@ export const CardsGrid = () => {
   }, [isGameStarted])
 
   return (
-    <StyledGrid>
+    <StyledGrid className={isGameStarted ? "gradientBorder" : ""}>
+      {!isGameStarted && (
+        <div className="startGame">
+          <StyledButton
+            type="button"
+            disabled={isGameStarted}
+            onClick={startGame}>
+            {isGameStarted ? "Game Started" : "Start Game"}
+          </StyledButton>
+        </div>
+      )}
       {shuffledDeck.map(({ element, id }) => (
         <Card key={id} handleOpenCard={handleOpenCard} id={id}>
           {element}

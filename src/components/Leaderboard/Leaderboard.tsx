@@ -1,15 +1,19 @@
+import { CloseButton } from "components/Buttons"
 import { useCallback, useEffect, useState } from "react"
 import { TScoreboard } from "types"
 import { leaderboardRef } from "../../firebase"
 import { sortNumbersBy } from "../../utils"
 import { StyledLeaderboard } from "./Styled.Leaderboard"
 import { StyledLeaderboardHeader } from "./Styled.LeaderboardHeader"
+import { StyledLeaderboardModal } from "./Styled.LeaderboardModal"
 
-export const Leaderboard = () => {
+type Props = {
+  closeLeaderboard: () => void
+}
+export const Leaderboard = ({ closeLeaderboard }: Props) => {
   const [leaderboard, setLeaderboard] = useState<TScoreboard[]>([])
 
   const getLeaderboard = useCallback(async () => {
-    console.log("GETTING LEADERBOARD")
     const leaderboardResults = await leaderboardRef.get()
     const promisedLeaderboard = leaderboardResults.docs.map((doc) => doc.data())
 
@@ -25,7 +29,6 @@ export const Leaderboard = () => {
 
   useEffect(() => {
     getLeaderboard()
-    console.log("RELOAD LEADERBOARD")
   }, [getLeaderboard])
 
   useEffect(() => {}, [leaderboard])
@@ -46,7 +49,8 @@ export const Leaderboard = () => {
   )
 
   return (
-    <>
+    <StyledLeaderboardModal>
+      <CloseButton close={closeLeaderboard} />
       <StyledLeaderboardHeader>Leaderboard</StyledLeaderboardHeader>
       <StyledLeaderboard>
         <li>
@@ -65,6 +69,6 @@ export const Leaderboard = () => {
         </li>
         {leaderboardResults}
       </StyledLeaderboard>
-    </>
+    </StyledLeaderboardModal>
   )
 }
