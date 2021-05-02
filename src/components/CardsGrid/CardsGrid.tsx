@@ -23,9 +23,6 @@ export const CardsGrid = () => {
   const [shuffledDeck, setShuffledDeck] = useState(shuffle(deck))
 
   const handleOpenCard = (id: Deck["id"]) => {
-    if (!isGameStarted) {
-      startGame()
-    }
     if (cardsOpen.length < 2) {
       setCardsOpen([...cardsOpen, id])
       addClicks()
